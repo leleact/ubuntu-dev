@@ -4,21 +4,11 @@ LABEL maintainer.eamil="leleact@gmail.com"
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt upgrade -y && \
-  apt install -y build-essential cmake gdb gdbserver rsync vim git openssh-server
+  apt install -y build-essential cmake gdb gdbserver rsync vim git openssh-server zsh
 
-RUN mkdir -p /run/sshd && \
-   mkdir /root/.ssh
-# 修改 root 的密码为 123456
-RUN echo 'root:123456' | chpasswd
-RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN mkdir -p /run/sshd &&  mkdir ~/.ssh && echo \
+"ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAt3a7UpH5XNtd0ZKOtDOsaEzEVfc7mye0Dz32Q47FVHf9GPZWVmyYcf6PeQckPLCwh8viyvaouOoe19Md0TldLBfQmrFWUUsWmNTNGvoHTYQnSC7n5Km6AJD0voTlWnGOdSh+fqvJGgl3ZgCOmpCW0WhQbLJqBisi+FkTmJZto9FHGvNd80BmI+dPa6UNEdXNWrdquaQkb7SufUSh3Jhiq+O4GzL9+qNOhv37TJxxRBZ6g93lq6rw9CJ37hTGXybgtC6ItyZvkOmkkokKL9pBE4Z/NR3AJV3kqjVc/uIp3xArF6Qht8Sx1AVV0C1myMCWekjq2V72j4Mg9JtJHKvQrnoHSYhQMELfGfQrd8YHGPmsB8mxC+FWuRrRzWhuUQtnNGQ1bjtg4st+AByEjYgN2TpYO1GZQrW7ZEiIMHHUjf/DelZpKBm2uYaFWv5GS0Tr6t88Rx2Ho6+8sTWUiQEeTDpgNT2r0Ma6oWB7rKPGxyXm9uZMMMwVKjeVpNnGz31J" >> ~/.ssh/authorized_keys
 
-#ENV NOTVISIBLE "in users profile"
-#RUN echo "export VISIBLE=now" >> /etc/profile
-
-# zsh
-RUN apt install -y zsh
 RUN git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
     && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
     && chsh -s /bin/zsh
@@ -37,15 +27,8 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions \
     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 RUN sed -ri 's/^plugins=.*/plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 
-
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 
-# 删除 apt update 产生的缓存文件
-# 因为 docker 的文件系统是层文件系统，上一个层中缓存有apt-get update的结果，
-# 那么下次 Dockerfile 运行时就会直接使用之前的缓存，
-# 这样 docker 中的 apt 软件源就不是最新的软件列表了，将会带来缓存过期的问题。
-# 并且这些缓存将占用不少空间，导致最终生成的image非常庞大，
-# 而这些垃圾文件是我们最终的image中无需使用到的东西，我们应当在Docker构建过程中予以删除。
 RUN apt clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
