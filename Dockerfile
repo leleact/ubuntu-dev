@@ -2,25 +2,17 @@ FROM ubuntu:latest
 LABEL maintainer.name="leleact"
 LABEL maintainer.eamil="leleact@gmail.com"
 
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list && \
-    apt clean && \
-    apt update
-
 ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt upgrade -y && \
+  apt install -y build-essential cmake gdb gdbserver rsync vim git openssh-server
 
-RUN apt upgrade -y && \
-  apt install -y build-essential cmake gdb gdbserver rsync vim git
-
-#ssh服务器
-# 参考 https://github.com/rastasheep/ubuntu-sshd/blob/ed6fffcaf5a49eccdf821af31c1594e3c3061010/18.04/Dockerfile
-#RUN apt install -y openssh-server
-#RUN mkdir /var/run/sshd && \
-#    mkdir /root/.ssh
+RUN mkdir -p /run/sshd && \
+   mkdir /root/.ssh
 # 修改 root 的密码为 123456
-#RUN echo 'root:123456' | chpasswd
-#RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN echo 'root:123456' | chpasswd
+RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 # SSH login fix. Otherwise user is kicked off after login
-#RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 #ENV NOTVISIBLE "in users profile"
 #RUN echo "export VISIBLE=now" >> /etc/profile
@@ -45,6 +37,8 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions \
     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 RUN sed -ri 's/^plugins=.*/plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 
+
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 
 # 删除 apt update 产生的缓存文件
 # 因为 docker 的文件系统是层文件系统，上一个层中缓存有apt-get update的结果，
