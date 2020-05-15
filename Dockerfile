@@ -12,7 +12,7 @@ RUN apt update && apt upgrade -y && apt install -y openssh-server zsh git vim cu
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && chsh -s /bin/zsh
 
-RUN apt install -y build-essential cmake gdb gdbserver rsync autojump
+RUN apt install -y build-essential cmake gdb gdbserver rsync autojump pkg-config libssh-dev libnspr4-dev libnss3-dev
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions \
