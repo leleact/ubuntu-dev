@@ -2,7 +2,6 @@ FROM ubuntu:latest
 LABEL maintainer.name="leleact" maintainer.eamil="leleact@gmail.com"
 
 EXPOSE 22
-VOLUME ["/home/lele/workspace"]
 CMD ["/usr/sbin/sshd", "-D"]
 
 ARG RSA_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAt3a7UpH5XNtd0ZKOtDOsaEzEVfc7mye0Dz32Q47FVHf9GPZWVmyYcf6PeQckPLCwh8viyvaouOoe19Md0TldLBfQmrFWUUsWmNTNGvoHTYQnSC7n5Km6AJD0voTlWnGOdSh+fqvJGgl3ZgCOmpCW0WhQbLJqBisi+FkTmJZto9FHGvNd80BmI+dPa6UNEdXNWrdquaQkb7SufUSh3Jhiq+O4GzL9+qNOhv37TJxxRBZ6g93lq6rw9CJ37hTGXybgtC6ItyZvkOmkkokKL9pBE4Z/NR3AJV3kqjVc/uIp3xArF6Qht8Sx1AVV0C1myMCWekjq2V72j4Mg9JtJHKvQrnoHSYhQMELfGfQrd8YHGPmsB8mxC+FWuRrRzWhuUQtnNGQ1bjtg4st+AByEjYgN2TpYO1GZQrW7ZEiIMHHUjf/DelZpKBm2uYaFWv5GS0Tr6t88Rx2Ho6+8sTWUiQEeTDpgNT2r0Ma6oWB7rKPGxyXm9uZMMMwVKjeVpNnGz31J"
@@ -29,3 +28,5 @@ RUN sed -ri 's/^plugins=.*/plugins=(git autojump zsh-syntax-highlighting zsh-aut
 USER root
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 RUN apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+VOLUME ["/home/lele/workspace"]
