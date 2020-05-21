@@ -11,7 +11,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN mkdir -p /run/sshd && mkdir ~/.ssh && echo $RSA_KEY >> ~/.ssh/authorized_keys && chmod 700 -R ~/.ssh
 
 RUN apt update && apt upgrade -y && apt install -y openssh-server zsh git vim curl wget \
-  build-essential cmake gdb gdbserver rsync autojump pkg-config libssh-dev libnspr4-dev libnss3-dev iputils-ping inetutils-telnet iproute2
+  build-essential cmake gdb gdbserver rsync autojump pkg-config libssh-dev libnspr4-dev \
+  libnss3-dev iputils-ping inetutils-telnet iproute2 doxygen
 
 RUN groupadd -g 1000 lele && useradd -u 1000 -c "account for dev" -g lele -s /bin/zsh -m -r lele
 RUN echo "lele:lele"|chpasswd
