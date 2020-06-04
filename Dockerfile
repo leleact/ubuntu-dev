@@ -25,7 +25,7 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions \
     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 RUN sed -ri 's/^plugins=.*/plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
-RUN echo "set -o vi" >> ~/.profile
+RUN echo "set -o vi" >> ~/.zshrc
 
 USER root
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
