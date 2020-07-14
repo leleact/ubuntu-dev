@@ -15,18 +15,13 @@ RUN apt update && apt upgrade -y && apt install -y openssh-server zsh git vim cu
   libnss3-dev iputils-ping inetutils-telnet iproute2 doxygen graphviz pstack clang clangd clang-format lldb \
   golang nodejs traceroute netcat dnsutils
 
-RUN groupadd -g 1000 lele && useradd -u 1000 -c "account for dev" -g lele -s /bin/zsh -m -r lele
+RUN groupadd -g 1000 lele && useradd -u 1000 -c "lele" -g lele -s /bin/zsh -m -r lele
 RUN echo "lele:lele"|chpasswd
 
 USER lele
 RUN mkdir -p /home/lele/.ssh && echo $RSA_KEY >> /home/lele/.ssh/authorized_keys && chmod 700 -R /home/lele/.ssh
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-    ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-RUN git clone https://github.com/zsh-users/zsh-autosuggestions \
-    ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-RUN sed -ri 's/^plugins=.*/plugins=(git autojump zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
-RUN echo "set -o vi" >> ~/.zshrc
+
+RUN echo "set -o vi" >> ~/.bashrc
 
 USER root
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
