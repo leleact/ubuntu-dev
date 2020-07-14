@@ -15,7 +15,7 @@ RUN apt update && apt upgrade -y && apt install -y openssh-server zsh git vim cu
   libnss3-dev iputils-ping inetutils-telnet iproute2 doxygen graphviz pstack clang clangd clang-format lldb \
   golang nodejs traceroute netcat dnsutils
 
-RUN groupadd -g 1000 lele && useradd -u 1000 -c "lele" -g lele -s /bin/zsh -m -r lele
+RUN groupadd -g 1000 lele && useradd -u 1000 -c "lele" -g lele -s /bin/bash -m -r lele
 RUN echo "lele:lele"|chpasswd
 
 USER lele
