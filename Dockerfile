@@ -13,7 +13,7 @@ RUN mkdir -p /run/sshd && mkdir ~/.ssh && echo $RSA_KEY >> ~/.ssh/authorized_key
 RUN apt update && apt upgrade -y && apt install -y openssh-server zsh git vim curl wget \
   build-essential cmake gdb gdbserver rsync autojump pkg-config libssh-dev libnspr4-dev \
   libnss3-dev iputils-ping inetutils-telnet iproute2 doxygen graphviz pstack clang clangd clang-format lldb \
-  golang nodejs traceroute netcat dnsutils
+  golang nodejs traceroute netcat dnsutils libboost-dev libsqlclient-dev
 
 RUN groupadd -g 1000 lele && useradd -u 1000 -c "lele" -g lele -s /bin/bash -m -r lele
 RUN echo "lele:lele"|chpasswd
