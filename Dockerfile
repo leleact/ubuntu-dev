@@ -8,18 +8,18 @@ ARG RSA_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAt3a7UpH5XNtd0ZKOtDOsaEzEVfc7mye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN mkdir -p /run/sshd && mkdir ~/.ssh && echo $RSA_KEY >> ~/.ssh/authorized_keys && chmod 600 -R ~/.ssh
+RUN mkdir -p /run/sshd && mkdir ~/.ssh && echo $RSA_KEY >> ~/.ssh/authorized_keys && chmod 700 -R ~/.ssh && chmod 600 ~/.ssh/authorized_keys
 
 RUN apt update && apt upgrade -y && apt install -y openssh-server zsh git vim curl wget \
   build-essential cmake gdb gdbserver rsync autojump pkg-config libssh-dev libnspr4-dev \
   libnss3-dev iputils-ping inetutils-telnet iproute2 doxygen graphviz pstack clang clangd clang-format lldb \
-  golang nodejs traceroute netcat dnsutils libboost-dev libsqlclient-dev
+  golang nodejs traceroute netcat dnsutils libboost-dev libsqlclient-dev gdb
 
 RUN groupadd -g 1000 lele && useradd -u 1000 -c "lele" -g lele -s /bin/bash -m -r lele
 RUN echo "lele:lele"|chpasswd
 
 USER lele
-RUN mkdir -p /home/lele/.ssh && echo $RSA_KEY >> /home/lele/.ssh/authorized_keys && chmod 600 -R /home/lele/.ssh
+RUN mkdir -p /home/lele/.ssh && echo $RSA_KEY >> /home/lele/.ssh/authorized_keys && chmod 700 -R /home/lele/.ssh && chmod 600 ~/.ssh/authorized_keys
 
 RUN echo "set -o vi" >> ~/.bashrc
 
